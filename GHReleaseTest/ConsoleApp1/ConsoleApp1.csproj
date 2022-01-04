@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+	<AssemblyVersion>$(APP_VERSION).$(GITHUB_RUN_NUMBER)</AssemblyVersion>
+	<CFBundleShortVersionString>$(APP_VERSION).$(GITHUB_RUN_NUMBER)</CFBundleShortVersionString>
+	<AssemblyVersion Condition="'$(APP_VERSION)' == ''">0.0.1.0</AssemblyVersion>
+
+	<OutputType>Exe</OutputType>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+</Project>
