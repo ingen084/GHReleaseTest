@@ -47,7 +47,8 @@ jobs:
       uses: vimtor/action-zip@v1
       if: startsWith(github.ref, 'refs/tags/')
       with:
-        files: 'tmp/*'
+        recursive: false
+        files: tmp/*
         dest: ${{ env.RELEASE_PREFIX }}-${{ matrix.os }}.zip
 
     - name: Release
@@ -55,6 +56,6 @@ jobs:
       if: startsWith(github.ref, 'refs/tags/')
       with:
         files: ${{ env.RELEASE_PREFIX }}-${{ matrix.os }}.zip
-        name: Release ${{ env.CI_ACTION_REF_NAME }}
+        name: v${{ env.CI_ACTION_REF_NAME }}
         draft: true
         prerelease: false
