@@ -6,7 +6,6 @@ on:
       - '*'
     tags:
       - '*.*.*'
-  workflow_dispatch:
 jobs:
   publish:
     runs-on: ${{ matrix.os }}
@@ -36,6 +35,7 @@ jobs:
         --self-contained true
       env:
         APP_VERSION: ${{ (contains(github.ref, 'tags/') && env.CI_ACTION_REF_NAME) || '0.0.1' }}
+        BUILD_NUMBER: ${{ env.GITHUB_RUN_NUMBER }}
 
     - name: Upload artifacts
       uses: actions/upload-artifact@v2
