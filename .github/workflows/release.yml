@@ -33,7 +33,7 @@ jobs:
         -p:PublishTrimmed=true
         --self-contained true
       env:
-        APP_VERSION: ${{ (contains(github.ref, 'tags/') && CI_REF_SLUG) || 0.0.1 }}
+        APP_VERSION: ${{ (contains(github.ref, 'tags/') && env.CI_REF_SLUG) || 0.0.1 }}
     - name: Archive production artifacts
       uses: actions/upload-artifact@v2
       with:
