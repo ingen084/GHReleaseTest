@@ -48,15 +48,13 @@ jobs:
       if: startsWith(github.ref, 'refs/tags/')
       with:
         files: 'tmp/*'
-        type: 'zip'
         dest: ${{ env.RELEASE_PREFIX }}-${{ matrix.os }}.zip
 
     - name: Release
       uses: softprops/action-gh-release@v1
       if: startsWith(github.ref, 'refs/tags/')
       with:
-        file: ${{ env.RELEASE_PREFIX }}-${{ matrix.os }}.zip
-        tag: ${{ github.ref }}
+        files: ${{ env.RELEASE_PREFIX }}-${{ matrix.os }}.zip
         name: Release ${{ env.CI_ACTION_REF_NAME }}
         draft: true
         prerelease: false
