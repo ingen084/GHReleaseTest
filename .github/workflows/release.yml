@@ -10,7 +10,6 @@ on:
 jobs:
   publish:
     runs-on: ${{ matrix.os }}
-
     strategy:
       matrix:
         os: [windows-latest, ubuntu-latest, macos-latest]
@@ -25,13 +24,13 @@ jobs:
     - name: Publish
       run: >
         dotnet publish GHReleaseTest/ConsoleApp1/ConsoleApp1.csproj
-        -c Release
-        -r ${{ fromJson('{ "windows-latest": "win10-x64", "ubuntu-latest": "linux-x64", "macos-latest": "osx-x64" }')[matrix.os] }}
-        -o tmp
-        -p:PublishReadyToRun=${{ (matrix.os == 'windows-latest' && 'true') || 'false' }}
-        -p:PublishSingleFile=true
-        -p:PublishTrimmed=true
-        --self-contained true
+          -c Release
+          -r ${{ fromJson('{ "windows-latest": "win10-x64", "ubuntu-latest": "linux-x64", "macos-latest": "osx-x64" }')[matrix.os] }}
+          -o tmp
+          -p:PublishReadyToRun=${{ (matrix.os == 'windows-latest' && 'true') || 'false' }}
+          -p:PublishSingleFile=true
+          -p:PublishTrimmed=true
+          --self-contained true
       env:
         APP_VERSION: ${{ (contains(github.ref, 'tags/') && env.CI_ACTION_REF_NAME) || '0.0.1' }}
     - name: Archive production artifacts
@@ -39,3 +38,24 @@ jobs:
       with:
         name: Artifact-${{ matrix.os }}
         path: tmp/*
+        
+  release:
+    runs-on: ubuntu-latest
+    if: contains(github.ref, 'tags/')
+    permissions:
+      contents: write
+    
+    steps:
+    - uses: actions/checkout@v2
+    - uses: FranzDiebold/github-env-vars-action@v2
+    - name: Download a Build Artifact
+      uses: actions/download-artifact@v2.1.0
+    - name: Upload a Release Artifact
+      uses: ncipollo/release-action@v1
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        artifacts: "*.zip"
+        tag_name: ${{ github.ref }}
+        release_name: Release ${{ env.CI_ACTION_REF_NAME }}
+        draft: true
+        prerelease: false
