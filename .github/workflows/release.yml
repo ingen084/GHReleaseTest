@@ -9,7 +9,11 @@ on:
 
 jobs:
   publish:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [windows-latest, ubuntu-latest, macos-latest]
 
     steps:
     - uses: actions/checkout@v2
@@ -17,12 +21,10 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 6.0.x
-    - name: Restore dependencies
-      run: dotnet restore GHReleaseTest/ConsoleApp1/ConsoleApp1.csproj -r linux-x64
     - name: Publish
-      run: dotnet publish GHReleaseTest/ConsoleApp1/ConsoleApp1.csproj --no-restore -c Release -r linux-x64 -o tmp/linux-x64 -p:PublishReadyToRun=false -p:PublishSingleFile=true -p:PublishTrimmed=true --self-contained true
+      run: "dotnet publish GHReleaseTest/ConsoleApp1/ConsoleApp1.csproj -c Release -r ${{ fromJson('{ \"windows-latest\": \"win10-x64\", \"ubuntu-latest\": \"linux-x64\", \"macos-latest\": \"osx-x64\" }')[matrix.os] }} -o tmp/linux-x64 -p:PublishReadyToRun=false -p:PublishSingleFile=true -p:PublishTrimmed=true --self-contained true"
     - name: Archive production artifacts
       uses: actions/upload-artifact@v2
       with:
-        name: Artifact
-        path: tmp/linux-x64/*
+        name: Artifact-${{ matrix.os }}
+        path: "tmp/${{ fromJson('{ \"windows-latest\": \"win10-x64\", \"ubuntu-latest\": \"linux-x64\", \"macos-latest\": \"osx-x64\" }')[matrix.os] }}/*"
