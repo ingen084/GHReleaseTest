@@ -20,7 +20,7 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore GHReleaseTest/ConsoleApp1/ConsoleApp1.csproj -r linux-x64
     - name: Publish
-      run: dotnet publish GHReleaseTest/ConsoleApp1/ConsoleApp1.csproj --no-restore -c Release -r linux-x64 -o tmp/linux-x64 -p:PublishReadyToRun=true -p:PublishSingleFile=true -p:PublishTrimmed=true --self-contained true
+      run: dotnet publish GHReleaseTest/ConsoleApp1/ConsoleApp1.csproj --no-restore -c Release -r linux-x64 -o tmp/linux-x64 -p:PublishReadyToRun=false -p:PublishSingleFile=true -p:PublishTrimmed=true --self-contained true
     - name: Archive production artifacts
       uses: actions/upload-artifact@v2
       with:
