@@ -3,3 +3,4 @@ using System.Reflection;
 
 Console.WriteLine("Hello, World!");
 Console.WriteLine("this app version: " + Assembly.GetExecutingAssembly().GetName().Version);
+Console.ReadLine();
