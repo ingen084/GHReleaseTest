@@ -1,0 +1,28 @@
+name: release
+
+on:
+  push:
+    branches:
+      - '*'
+    tags:
+      - '*.*.*.*'
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 6.0.x
+    - name: Restore dependencies
+      run: dotnet restore
+    - name: Publish
+      run: dotnet publish --no-restore -c Release -r linux-x64 -o tmp/linux-x64 -p:PublishReadyToRun=true -p:PublishSingleFile=true -p:PublishTrimmed=true --self-contained true
+    - name: Archive production artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: Artifact
+        path: tmp/linux-x64/*
