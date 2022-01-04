@@ -24,13 +24,13 @@ jobs:
     - name: Publish
       run: >
         dotnet publish GHReleaseTest/ConsoleApp1/ConsoleApp1.csproj
-          -c Release
-          -r ${{ fromJson('{ "windows-latest": "win10-x64", "ubuntu-latest": "linux-x64", "macos-latest": "osx-x64" }')[matrix.os] }}
-          -o tmp
-          -p:PublishReadyToRun=${{ (matrix.os == 'windows-latest' && 'true') || 'false' }}
-          -p:PublishSingleFile=true
-          -p:PublishTrimmed=true
-          --self-contained true
+        -c Release
+        -r ${{ fromJson('{ "windows-latest": "win10-x64", "ubuntu-latest": "linux-x64", "macos-latest": "osx-x64" }')[matrix.os] }}
+        -o tmp
+        -p:PublishReadyToRun=${{ (matrix.os == 'windows-latest' && 'true') || 'false' }}
+        -p:PublishSingleFile=true
+        -p:PublishTrimmed=true
+        --self-contained true
       env:
         APP_VERSION: ${{ (contains(github.ref, 'tags/') && env.CI_ACTION_REF_NAME) || '0.0.1' }}
     - name: Archive production artifacts
